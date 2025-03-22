@@ -166,7 +166,7 @@ class _CreateAccountScreen1State extends State<CreateAccountScreen1> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple.shade300,
+                    backgroundColor: Colors.purple,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

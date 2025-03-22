@@ -45,10 +45,13 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
   Future<void> createAccount(Map data) async {
     try {
           final response = await http.post(
-                Uri.parse(""), // Change to legit api end point
+                Uri.parse("http://192.168.31.125:8000/api/auth/register/"), // Change to legit api end point
                 body: json.encode(data),
                 headers: {'Content-Type': 'application/json'},
               );
+
+    print("response: ${response.body}");
+    print("response status: ${response.statusCode}");
 
     if(response.statusCode == 201){
       print("Account Created Successfully");

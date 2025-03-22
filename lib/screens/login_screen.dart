@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://yourapi.com/login'), // Change to legit api end point
+        Uri.parse('http://192.168.31.125:8000/api/auth/login/'), // Change to legit api end point
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text,
@@ -43,9 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+
         // Handle successful login
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/');
       } else {
         setState(() {
           _errorMessage = 'Invalid email or password';

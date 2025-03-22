@@ -43,23 +43,25 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
   }
 
   Future<void> createAccount(Map data) async {
-    // final response = await http.post(
-    //   Uri.parse(""),
-    //   body: json.encode(data),
-    //   headers: {'Content-Type': 'application/json'},
-    // );
+    try {
+          final response = await http.post(
+                Uri.parse(""), // Change to legit api end point
+                body: json.encode(data),
+                headers: {'Content-Type': 'application/json'},
+              );
 
-    // if(response.statusCode == 201){
-    //   print("Account Created Successfully");
-    //   // Navigator.pushNamed(context, '/accountSuccess');
-    // } else {
-    //   print("Failed to create account: ${response.body}");
-        // Navigator.pushNamed(context, '/accountFailure');
-    // }
+    if(response.statusCode == 201){
+      print("Account Created Successfully");
+      Navigator.pushNamed(context, '/accountSuccess');
+    } else {
+      print("Failed to create account: ${response.body}");
+        Navigator.pushNamed(context, '/accountFailure');
+    }
+    } catch (e) {
+      print("Failed to create account: $e");
+      Navigator.pushNamed(context, '/accountFailure');
+    } 
 
-    Navigator.pushNamed(context, '/accountSuccess');
-    // Navigator.pushNamed(context, '/accountFailure');
-    
   }
 
   @override

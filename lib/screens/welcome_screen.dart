@@ -65,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/createAccount');
+                        Navigator.pushNamed(context, '/createAccountScreen1');
                       },
                       child: Text(
                         "Create Account",

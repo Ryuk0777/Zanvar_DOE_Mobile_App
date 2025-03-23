@@ -5,7 +5,7 @@ import 'package:zanvar_doe_app/data/notifiers.dart';
 import 'package:http/http.dart' as http;
 
 class CreateAccountScreen2 extends StatefulWidget {
-  const CreateAccountScreen2({Key? key}) : super(key: key);
+  const CreateAccountScreen2({super.key});
 
   @override
   _CreateAccountScreen2State createState() => _CreateAccountScreen2State();

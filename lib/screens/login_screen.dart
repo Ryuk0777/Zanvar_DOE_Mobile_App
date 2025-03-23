@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -43,16 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
+      print('Response body: ${response.body}');
+      print('Response status code: ${response.statusCode}');
+
+
       if (response.statusCode == 200) {
 
         // Handle successful login
-        Navigator.pushNamed(context, '/');
+        Navigator.pushNamed(context, '/home');
       } else {
         setState(() {
           _errorMessage = 'Invalid email or password';
         });
       }
     } catch (e) {
+      print("Error: $e");
       setState(() {
         _errorMessage = 'An error occurred. Please try again.';
       });

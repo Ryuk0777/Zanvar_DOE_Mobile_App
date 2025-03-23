@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zanvar_doe_app/screens/account_failed_screen.dart';
 import 'package:zanvar_doe_app/screens/account_success_screen.dart';
+import 'package:zanvar_doe_app/screens/home_screen.dart';
 import 'package:zanvar_doe_app/screens/login_screen.dart';
+import 'package:zanvar_doe_app/screens/profile_screen.dart';
+import 'package:zanvar_doe_app/screens/search_doe_screen.dart';
 import 'package:zanvar_doe_app/screens/welcome_screen.dart';
 import 'package:zanvar_doe_app/screens/create_account_screen_1.dart';
 import 'package:zanvar_doe_app/screens/create_account_screen_2.dart';
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
 
@@ -30,7 +33,10 @@ class MyApp extends StatelessWidget {
         '/accountFailure': (context) => AccountFailureScreen(),
 
         // Account Login 
-        '/login': (context) => LoginScreen(), 
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(), 
+        '/searchDOE': (context) => SearchDOEScreen(),
+        '/profile': (context) => ProfileScreen(),
         
       },
     );

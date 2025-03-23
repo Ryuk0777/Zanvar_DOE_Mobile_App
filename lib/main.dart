@@ -5,6 +5,7 @@ import 'package:zanvar_doe_app/screens/home_screen.dart';
 import 'package:zanvar_doe_app/screens/login_screen.dart';
 import 'package:zanvar_doe_app/screens/profile_screen.dart';
 import 'package:zanvar_doe_app/screens/search_doe_screen.dart';
+import 'package:zanvar_doe_app/screens/search_results_screen.dart';
 import 'package:zanvar_doe_app/screens/welcome_screen.dart';
 import 'package:zanvar_doe_app/screens/create_account_screen_1.dart';
 import 'package:zanvar_doe_app/screens/create_account_screen_2.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(), 
         '/searchDOE': (context) => SearchDOEScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/searchResults': (context) => SearchResultsScreen(),
         
       },
     );

@@ -7,3 +7,6 @@ ValueNotifier<Map> createAccountMapNotifier = ValueNotifier({
   'last_name': "",
   'password': "",
 });
+
+
+ValueNotifier<List<dynamic>> search_DOE_sub_result_Notifier = ValueNotifier([]);

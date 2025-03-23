@@ -5,8 +5,8 @@ class ProfileScreen extends StatelessWidget {
   final String email = "profile@gmail.com";
 
   const ProfileScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SearchDOEScreen extends StatefulWidget {
   const SearchDOEScreen({super.key});
@@ -9,6 +11,29 @@ class SearchDOEScreen extends StatefulWidget {
 
 class _SearchDOEScreenState extends State<SearchDOEScreen> {
   TextEditingController searchController = TextEditingController();
+
+  Future<void> searchdoe() async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+          "http://127.0.0.1:8000/api/filter-doe/",
+        ), // Change to legit api end point
+        body: json.encode({"Tool_Diameter": searchController.text}),
+        headers: {'Content-Type': 'application/json', "Authorization": ""},
+      );
+
+      print("response: ${response.body}");
+      print("response status: ${response.statusCode}");
+
+      if (response.statusCode == 201) {
+        print("Success");
+      } else {
+        print("Faileds");
+      }
+    } catch (e) {
+      print("Failed to Featch: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +118,8 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
                 ),
                 onPressed: () {
                   // ✅ Navigation added
-                  Navigator.pushNamed(context, '/searchResults');
+                  searchdoe();
+                  // Navigator.pushNamed(context, '/searchResults');
                 },
                 child: const Text(
                   "Next",

@@ -1,5 +1,5 @@
+// All your imports remain unchanged
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:zanvar_doe_app/data/notifiers.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +13,7 @@ class CreateAccountScreen2 extends StatefulWidget {
 
 class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
@@ -23,6 +22,7 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
   bool hasNumber = false;
   bool hasSymbol = false;
   bool bothPassAreSame = false;
+  bool _isLoading = false;
 
   void _validatePassword(String password) {
     setState(() {
@@ -43,28 +43,30 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
   }
 
   Future<void> createAccount(Map data) async {
+    setState(() => _isLoading = true);
     try {
-          final response = await http.post(
-                Uri.parse("http://192.168.31.125:8000/api/auth/register/"), // Change to legit api end point
-                body: json.encode(data),
-                headers: {'Content-Type': 'application/json'},
-              );
+      final response = await http.post(
+        Uri.parse("https://doe-backend.onrender.com/auth/user/sign-up"),
+        body: json.encode(data),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    print("response: ${response.body}");
-    print("response status: ${response.statusCode}");
+      print("response: ${response.body}");
+      print("response status: ${response.statusCode}");
 
-    if(response.statusCode == 201){
-      print("Account Created Successfully");
-      Navigator.pushNamed(context, '/accountSuccess');
-    } else {
-      print("Failed to create account: ${response.body}");
+      if (response.statusCode == 201) {
+        print("Account Created Successfully");
+        Navigator.pushNamed(context, '/accountSuccess');
+      } else {
+        print("Failed to create account: ${response.body}");
         Navigator.pushNamed(context, '/accountFailure');
-    }
+      }
     } catch (e) {
       print("Failed to create account: $e");
       Navigator.pushNamed(context, '/accountFailure');
-    } 
-
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -75,11 +77,7 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
       valueListenable: createAccountMapNotifier,
       builder: (context, value, child) {
         return GestureDetector(
-          onTap: () {
-            FocusScope.of(
-              context,
-            ).unfocus(); // Dismisses the keyboard when tapping outside
-          },
+          onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -97,10 +95,7 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
                   const Center(
                     child: Text(
                       "Create your password 2/2",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -114,10 +109,7 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Text(
-                    "Password",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
+                  const Text("Password", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 8),
                   TextField(
                     controller: passwordController,
@@ -125,28 +117,15 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
                     onChanged: _validatePassword,
                     decoration: InputDecoration(
                       hintText: "Enter password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isPasswordVisible = !isPasswordVisible;
-                          });
-                        },
+                        icon: Icon(isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: () => setState(() => isPasswordVisible = !isPasswordVisible),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Confirm Password",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
+                  const Text("Confirm Password", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                   const SizedBox(height: 8),
                   TextField(
                     controller: confirmPasswordController,
@@ -154,21 +133,10 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
                     onChanged: _validateConfirmPassword,
                     decoration: InputDecoration(
                       hintText: "Confirm password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          isConfirmPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isConfirmPasswordVisible =
-                                !isConfirmPasswordVisible;
-                          });
-                        },
+                        icon: Icon(isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: () => setState(() => isConfirmPasswordVisible = !isConfirmPasswordVisible),
                       ),
                     ),
                   ),
@@ -197,26 +165,32 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        isPasswordValid && bothPassAreSame
-                            ? Colors.purple
-                            : Colors.purple.withValues(alpha: 0.6),
+                    backgroundColor: (isPasswordValid && bothPassAreSame)
+                        ? Colors.purple
+                        : Colors.purple.withOpacity(0.6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed:
-                      isPasswordValid && bothPassAreSame
-                          ? () {
-                            createAccountMapNotifier.value['password'] =
-                                passwordController.text;
-                            createAccount(createAccountMapNotifier.value);
-                          }
-                          : null,
-                  child: const Text(
-                    "Create Account",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                  onPressed: (isPasswordValid && bothPassAreSame && !_isLoading)
+                      ? () {
+                          createAccountMapNotifier.value['password'] = passwordController.text;
+                          createAccount(createAccountMapNotifier.value);
+                        }
+                      : null,
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text(
+                          "Create Account",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
                 ),
               ),
             ),

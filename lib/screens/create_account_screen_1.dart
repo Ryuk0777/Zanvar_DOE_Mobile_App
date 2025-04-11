@@ -173,9 +173,9 @@ class _CreateAccountScreen1State extends State<CreateAccountScreen1> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
-                      createAccountMapNotifier.value['first_name'] =
+                      createAccountMapNotifier.value['firstName'] =
                           _firstNameController.text;
-                      createAccountMapNotifier.value['last_name'] =
+                      createAccountMapNotifier.value['lastName'] =
                           _lastNameController.text;
                       createAccountMapNotifier.value['email'] =
                           _emailController.text;

@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final String name = "profile";
-  final String email = "profile@gmail.com";
+class ProfileScreen extends StatefulWidget {
 
   const ProfileScreen({
     super.key,
   });
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  
+  String name = "profile";
+  String email = "profile@gmail.com";
+
+  @override
+  void initState() {
+    super.initState();
+    getValue();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +59,10 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                logout();
+                Navigator.pushNamed(context, "/");
+              },
               icon: const Icon(Icons.logout),
               label: const Text('Logout'),
               style: ElevatedButton.styleFrom(
@@ -88,5 +106,28 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+  
+  void getValue() async {
+    
+    var prefs = await SharedPreferences.getInstance();
+
+    var getFirstName = prefs.getString("firstName");
+    var getLastName = prefs.getString("lastName");
+    var getEmail = prefs.getString("email");
+
+
+    setState(() {
+      
+    name = "$getFirstName $getLastName" ?? "profile";
+    email = getEmail ?? "profile@gmail.com";
+
+    });
+  }
+  
+  void logout() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool("isLogin", false);
   }
 }

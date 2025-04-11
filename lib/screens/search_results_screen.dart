@@ -2,19 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zanvar_doe_app/data/notifiers.dart';
 
 class SearchResultsScreen extends StatelessWidget {
-  final List<Map<String, String>> results = List.generate(
-    5,
-    (index) => {
-      "partName": "Flywheel Housing",
-      "partNo": "4H.682.01/04",
-      "machineType": "SRF Unit No. 01",
-      "operation": "Tapping",
-      "feedAvailable": "Yes",
-      "speedAvailable": "No",
-    },
-  );
 
-  SearchResultsScreen({super.key});
+  const SearchResultsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,18 +82,21 @@ class SearchResultsScreen extends StatelessWidget {
                           style: const TextStyle(color: Colors.white),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/partDetails',
-                            ); // ✅ Navigation updated
+                        ValueListenableBuilder(
+                          valueListenable: cardID,
+                          builder: (context, value, child) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                              ),
+                              onPressed: () {
+                                cardID.value = index;
+                                Navigator.pushNamed(context, '/finalResults');
+                              },
+                              child: const Text("Read More ⫸"),
+                            );
                           },
-                          child: const Text("Read More ⫸"),
                         ),
                       ],
                     ),

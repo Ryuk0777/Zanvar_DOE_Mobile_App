@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -35,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.31.125:8000/api/auth/login/'), // Change to legit api end point
+        Uri.parse('https://doe-backend.onrender.com/auth/user/login'), // Change to legit api end point
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text,
@@ -43,13 +45,21 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
-      print('Response body: ${response.body}');
+      final Map<String, dynamic> data = jsonDecode(response.body);
       print('Response status code: ${response.statusCode}');
+      print(data);
 
 
       if (response.statusCode == 200) {
 
-        // Handle successful login
+        var prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString("auth_token", data["token"]);
+        await prefs.setString("email", data["user"]["email"]);
+        await prefs.setString("firstName", data["user"]["firstName"]);
+        await prefs.setString("lastName", data["user"]["lastName"]);
+        await prefs.setBool("isLogin", true);
+
         Navigator.pushNamed(context, '/home');
       } else {
         setState(() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:zanvar_doe_app/data/notifiers.dart';
 
@@ -12,21 +13,26 @@ class SearchDOEScreen extends StatefulWidget {
 
 class _SearchDOEScreenState extends State<SearchDOEScreen> {
   TextEditingController searchController = TextEditingController();
+  var token = "";
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getValue();
+  }
 
   Future<List<dynamic>> searchdoe() async {
     print("Next Clicked\n");
     try {
-      final response = await http.post(
-        Uri.parse("http://192.168.31.125:8000/api/filter-doe/"),
-        body: json.encode({"Tool_Diameter": searchController.text}),
+      final response = await http.get(
+        Uri.parse("https://doe-backend.onrender.com/doe?diameter=${searchController.text}"),
         headers: {
           'Content-Type': 'application/json',
-          "Authorization":
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODEwODQ2LCJpYXQiOjE3NDI3MjQ0NDYsImp0aSI6IjBiZGVlMTYyYWNlYTQ4MTA5OTgxYzU3MGJlZDU4MmViIiwidXNlcl9pZCI6NX0.G5W-f1xW-BCJpcqbjYWm9D9L65H9DKAve1A_psTTspg",
+          "Authorization": "Bearer $token",
         },
       );
 
-      // print("response body: ${response.body}");
       print("response status: ${response.statusCode}\n");
 
       if (response.statusCode == 200) {
@@ -34,9 +40,7 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
         if (jsonResponse is List) {
           return jsonResponse;
         } else {
-          throw Exception(
-            'Expected a list but got ${jsonResponse.runtimeType}',
-          );
+          throw Exception('Expected a list but got ${jsonResponse.runtimeType}');
         }
       } else {
         print("Failed\n");
@@ -61,7 +65,7 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {
-                Navigator.pop(context); // ✅ Back navigation added
+                Navigator.pop(context);
               },
             ),
             actions: const [
@@ -80,8 +84,6 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-
-                // Search Box
                 TextField(
                   controller: searchController,
                   decoration: InputDecoration(
@@ -113,10 +115,7 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
-                // Note
                 const Row(
                   children: [
                     Icon(Icons.info_outline, size: 16, color: Colors.black),
@@ -127,43 +126,49 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
                     ),
                   ],
                 ),
-
                 const Spacer(),
-
-                // Next Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple, // Purple color
+                      backgroundColor: Colors.purple,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    onPressed: () async {
-                      final results = await searchdoe();
-                      if (results.isNotEmpty) {
-                        search_DOE_sub_result_Notifier.value = results;
-                        // print(results);
-                        Navigator.pushNamed(context, '/searchResults');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'No results found or an error occurred',
+                    onPressed: _isLoading
+                        ? null
+                        : () async {
+                            setState(() => _isLoading = true);
+                            final results = await searchdoe();
+                            setState(() => _isLoading = false);
+                            if (results.isNotEmpty) {
+                              search_DOE_sub_result_Notifier.value = results;
+                              Navigator.pushNamed(context, '/searchResults');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('No results found or an error occurred'),
+                                ),
+                              );
+                            }
+                          },
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
                             ),
+                          )
+                        : const Text(
+                            "Next",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
               ],
             ),
@@ -171,5 +176,13 @@ class _SearchDOEScreenState extends State<SearchDOEScreen> {
         );
       },
     );
+  }
+
+  void getValue() async {
+    var prefs = await SharedPreferences.getInstance();
+    var getToken = prefs.getString("auth_token");
+    setState(() {
+      token = getToken ?? " ";
+    });
   }
 }

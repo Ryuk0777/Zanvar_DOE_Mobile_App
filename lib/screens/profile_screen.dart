@@ -119,7 +119,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       
-    name = "$getFirstName $getLastName" ?? "profile";
+
+    var firstName = getFirstName ?? "First Name";
+    var lastName = getLastName ?? "Last Name"; 
+    name = "$firstName $lastName" ?? "profile";
     email = getEmail ?? "profile@gmail.com";
 
     });

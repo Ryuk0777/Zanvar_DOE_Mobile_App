@@ -81,6 +81,18 @@ class SearchResultsScreen extends StatelessWidget {
                           "Speed is Available : ${item["Speed_In_Vc"]}",
                           style: const TextStyle(color: Colors.white),
                         ),
+                        Text(
+                          "Part material grade CI/SGI: ${item["Part_Material_Grade_CI/SGI"]}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Tool/insert description : ${item["Tool/Insert_Description"]}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Tool category : ${item["Tool_Category"]}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
                         const SizedBox(height: 10),
                         ValueListenableBuilder(
                           valueListenable: cardID,

@@ -68,6 +68,30 @@ class FinalResultScreen extends StatelessWidget {
                           "Surface Finish CPK",
                           resultList[cardId]["Surface_Finish_Cpk"] ?? "N/A",
                         ),
+                        _buildRow(
+                          "Machine Make",
+                          resultList[cardId]["Machine_Make"] ?? "N/A",
+                        ),
+                        _buildRow(
+                          "Spindle Taper BT40/BT50",
+                          resultList[cardId]["Spindle_Taper_BT40/BT50"] ?? "N/A",
+                        ),
+                        _buildRow(
+                          "Speed in VC",
+                          resultList[cardId]["Speed_In_Vc"] ?? "N/A",
+                        ),
+                        _buildRow(
+                          "Speed in rpm",
+                          resultList[cardId]["Speed_In_RPM"] ?? "N/A",
+                        ),
+                        _buildRow(
+                          "feed in mm/tooth",
+                          resultList[cardId]["Feed_In_mm/tooth"] ?? "N/A",
+                        ),
+                        _buildRow(
+                          "Feed in mm/revolution",
+                          resultList[cardId]["Feed_In_mm/revolution"] ?? "N/A",
+                        ),
                       ]),
                       const SizedBox(height: 20),
 

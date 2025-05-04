@@ -51,18 +51,13 @@ class _CreateAccountScreen2State extends State<CreateAccountScreen2> {
         headers: {'Content-Type': 'application/json'},
       );
 
-      print("response: ${response.body}");
-      print("response status: ${response.statusCode}");
 
       if (response.statusCode == 201) {
-        print("Account Created Successfully");
         Navigator.pushNamed(context, '/accountSuccess');
       } else {
-        print("Failed to create account: ${response.body}");
         Navigator.pushNamed(context, '/accountFailure');
       }
     } catch (e) {
-      print("Failed to create account: $e");
       Navigator.pushNamed(context, '/accountFailure');
     } finally {
       setState(() => _isLoading = false);

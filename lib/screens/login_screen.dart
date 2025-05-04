@@ -46,8 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       final Map<String, dynamic> data = jsonDecode(response.body);
-      print('Response status code: ${response.statusCode}');
-      print(data);
 
 
       if (response.statusCode == 200) {
@@ -67,7 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (e) {
-      print("Error: $e");
       setState(() {
         _errorMessage = 'An error occurred. Please try again.';
       });

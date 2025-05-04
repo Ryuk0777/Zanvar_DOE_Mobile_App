@@ -74,9 +74,6 @@ class _MyAppState extends State<MyApp> {
           body: json.encode({"token": token}),
         );
 
-        print('Status Code: ${response.statusCode}');
-        print('Response Body: ${response.body}');
-
         var data = jsonDecode(response.body);
 
         if(data["valid"]){
@@ -86,11 +83,9 @@ class _MyAppState extends State<MyApp> {
         }
 
       } catch (e) {
-        print("Error during authentication: $e");
         prefs.setBool("isLogin", false);
       }
     } else {
-      print("No token found. User is not authenticated.");
       prefs.setBool("isLogin", false);
     }
   }

@@ -45,6 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
+      print(response.body);
+
       final Map<String, dynamic> data = jsonDecode(response.body);
 
 
@@ -65,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (e) {
+      print("The error is: $e");
       setState(() {
         _errorMessage = 'An error occurred. Please try again.';
       });
